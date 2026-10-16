@@ -1,0 +1,782 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مشوارك براحتك | Mishwark Brahtak - Private Car & Driver Service</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Cairo & Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#051329',
+                            card: 'rgba(15, 32, 67, 0.75)',
+                            gold: '#F3C649',
+                            goldHover: '#E0B236',
+                            accent: '#10B981',
+                            accentHover: '#059669',
+                            blueGlow: '#1E40AF'
+                        }
+                    },
+                    fontFamily: {
+                        ar: ['Cairo', 'sans-serif'],
+                        en: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #030B17;
+            color: #F1F5F9;
+            overflow-x: hidden;
+            transition: direction 0.3s ease, font-family 0.3s ease;
+        }
+
+        body[dir="rtl"] {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body[dir="ltr"] {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Modern Glassmorphism Effect */
+        .glass-card {
+            background: rgba(13, 27, 52, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(243, 198, 73, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-card-interactive {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card-interactive:hover {
+            transform: translateY(-5px);
+            border-color: rgba(243, 198, 73, 0.5);
+            box-shadow: 0 12px 40px 0 rgba(243, 198, 73, 0.15);
+        }
+
+        /* Glowing accents */
+        .gold-glow {
+            box-shadow: 0 0 25px rgba(243, 198, 73, 0.25);
+        }
+
+        .green-glow {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030B17;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1E293B;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #F3C649;
+        }
+
+        /* Background Light Gradients */
+        .bg-blob-1 {
+            position: absolute;
+            top: -10%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(243, 198, 73, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-blob-2 {
+            position: absolute;
+            top: 40%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(30, 64, 175, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Range Slider Styling */
+        input[type=range] {
+            accent-color: #F3C649;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen selection:bg-brand-gold selection:text-brand-dark" dir="rtl">
+
+    <!-- Ambient background blobs -->
+    <div class="bg-blob-1"></div>
+    <div class="bg-blob-2"></div>
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-brand-dark/80 border-b border-slate-800/80">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-gold to-yellow-200 flex items-center justify-center text-brand-dark text-xl font-black shadow-lg">
+                    <i class="fa-solid fa-car-side"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-bold text-white tracking-wide block leading-tight">
+                        <span data-i18n="brandName">مشوارك</span> <span class="text-brand-gold" data-i18n="brandHighlight">براحتك</span>
+                    </span>
+                    <span class="text-xs text-slate-400 block" data-i18n="brandSub">حجز سيارة بسائق في القاهرة</span>
+                </div>
+            </div>
+            
+            <!-- Controls (Language Switcher & Phone Button) -->
+            <div class="flex items-center gap-3">
+                <!-- Language Toggle Switcher -->
+                <button onclick="toggleLanguage()" class="flex items-center gap-2 bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-full text-xs font-bold transition shadow-sm">
+                    <i class="fa-solid fa-globe text-brand-gold"></i>
+                    <span id="lang-label">English</span>
+                </button>
+
+                <!-- Phone Call Button -->
+                <a href="tel:01091810410" class="hidden sm:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700 text-brand-gold px-4 py-2 rounded-full border border-brand-gold/30 transition text-sm font-semibold">
+                    <i class="fa-solid fa-phone text-xs"></i>
+                    <span dir="ltr">01091810410</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10 max-w-6xl mx-auto px-4 py-8 space-y-16">
+
+        <!-- Hero Section -->
+        <section class="text-center space-y-6 pt-4 pb-2">
+            <div class="inline-flex items-center gap-2 bg-brand-gold/10 border border-brand-gold/30 px-4 py-1.5 rounded-full text-brand-gold text-sm font-semibold mb-2">
+                <i class="fa-solid fa-crown text-xs"></i>
+                <span data-i18n="badgeText">راحة، خصوصية، ومواعيد دقيقة</span>
+            </div>
+            
+            <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
+                <span data-i18n="heroTitleStart">تنقّل في القاهرة</span> <span class="bg-gradient-to-r from-brand-gold via-yellow-200 to-amber-400 bg-clip-text text-transparent" data-i18n="heroTitleHighlight">بأعلى درجات الراحة</span>
+            </h1>
+            
+            <p class="text-slate-300 max-w-2xl mx-auto text-base md:text-lg font-light leading-relaxed" data-i18n="heroSub">
+                احجز سيارتك الفاخرة بسائق محترف بالساعة أو باليوم. أسعار واضحة ومحددة مسبقاً وباقات مرنة تناسب جميع مشاويرك اليومية والعملية.
+            </p>
+
+            <div class="flex flex-wrap items-center justify-center gap-4 pt-2">
+                <a href="#calculator" class="bg-brand-gold hover:bg-brand-goldHover text-brand-dark font-bold px-7 py-3.5 rounded-2xl transition shadow-lg gold-glow flex items-center gap-2 text-base">
+                    <i class="fa-solid fa-calculator"></i>
+                    <span data-i18n="btnCalc">احسب تكلفة مشوارك</span>
+                </a>
+                <a href="#packages" class="bg-slate-800/90 hover:bg-slate-700 text-white font-medium px-7 py-3.5 rounded-2xl transition border border-slate-700 flex items-center gap-2 text-base">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span data-i18n="btnPackages">استعراض الباقات</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Pricing Packages Section -->
+        <section id="packages" class="space-y-8">
+            <div class="text-center space-y-2">
+                <h2 class="text-2xl md:text-3xl font-bold text-white" data-i18n="packagesTitle">باقات الحجز المتاحة</h2>
+                <p class="text-slate-400 text-sm md:text-base" data-i18n="packagesSub">اختر الباقة المناسبة لوقتك واحتياجك</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Package 1 -->
+                <div class="glass-card glass-card-interactive rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden group">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-start">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700" data-i18n="pkg1Badge">باقة المشاوير السريعة</span>
+                            <i class="fa-solid fa-clock text-brand-gold text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white" data-i18n="pkg1Title">3 ساعات</h3>
+                            <div class="text-3xl font-black text-brand-gold mt-2">900 <span class="text-sm font-normal text-slate-300" data-i18n="currency">ج.م</span></div>
+                        </div>
+                        <ul class="space-y-2 text-sm text-slate-300 pt-2 border-t border-slate-800">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-accent text-xs"></i> <span data-i18n="pkg1Km">تشمل حتى <strong>60 كم</strong> إجماليًا</span></li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-accent text-xs"></i> <span data-i18n="featCar">سيارة حديثة ومكيفة</span></li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-accent text-xs"></i> <span data-i18n="featDriver">سائق محترف وملتزم</span></li>
+                        </ul>
+                    </div>
+                    <button onclick="selectPackage(3, 900, 60)" class="mt-6 w-full py-3 bg-slate-800 hover:bg-brand-gold hover:text-brand-dark text-slate-200 font-bold rounded-xl transition border border-slate-700 flex items-center justify-center gap-2">
+                        <span data-i18n="btnSelectPkg">اختيار الباقة</span>
+                        <i class="fa-solid fa-arrow-left text-xs rtl-icon"></i>
+                    </button>
+                </div>
+
+                <!-- Package 2 (Popular) -->
+                <div class="glass-card glass-card-interactive rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden border-brand-gold/60 ring-2 ring-brand-gold/30">
+                    <div class="absolute -left-12 top-5 bg-brand-gold text-brand-dark text-xs font-bold py-1 px-12 -rotate-45 shadow-md uppercase" data-i18n="popularRibbon">
+                        الأكثر طلباً
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-start">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-brand-gold bg-brand-gold/10 px-3 py-1 rounded-full border border-brand-gold/30" data-i18n="pkg2Badge">باقة نصف يوم</span>
+                            <i class="fa-solid fa-star text-brand-gold text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white" data-i18n="pkg2Title">5 ساعات</h3>
+                            <div class="text-3xl font-black text-brand-gold mt-2">1,400 <span class="text-sm font-normal text-slate-300" data-i18n="currency">ج.م</span></div>
+                        </div>
+                        <ul class="space-y-2 text-sm text-slate-300 pt-2 border-t border-slate-800">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-accent text-xs"></i> <span data-i18n="pkg2Km">تشمل حتى <strong>100 كم</strong> إجماليًا</span></li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-accent text-xs"></i> <span data-i18n="featCar">سيارة حديثة ومكيفة</span></li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-accent text-xs"></i> <span data-i18n="pkg2Note">مناسبة للاجتماعات والتسوق</span></li>
+                        </ul>
+                    </div>
+                    <button onclick="selectPackage(5, 1400, 100)" class="mt-6 w-full py-3 bg-brand-gold hover:bg-brand-goldHover text-brand-dark font-bold rounded-xl transition shadow-md flex items-center justify-center gap-2">
+                        <span data-i18n="btnSelectPkg">اختيار الباقة</span>
+                        <i class="fa-solid fa-arrow-left text-xs rtl-icon"></i>
+                    </button>
+                </div>
+
+                <!-- Package 3 -->
+                <div class="glass-card glass-card-interactive rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-start">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700" data-i18n="pkg3Badge">باقة اليوم الكامل</span>
+                            <i class="fa-solid fa-briefcase text-brand-gold text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white" data-i18n="pkg3Title">8 ساعات</h3>
+                            <div class="text-3xl font-black text-brand-gold mt-2">2,200 <span class="text-sm font-normal text-slate-300" data-i18n="currency">ج.م</span></div>
+                        </div>
+                        <ul class="space-y-2 text-sm text-slate-300 pt-2 border-t border-slate-800">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-accent text-xs"></i> <span data-i18n="pkg3Km">تشمل حتى <strong>160 كم</strong> إجماليًا</span></li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-accent text-xs"></i> <span data-i18n="pkg3Note">تغطية لكافة تنقلات اليوم</span></li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-accent text-xs"></i> <span data-i18n="pkg3Flex">أقصى درجات المرونة والراحة</span></li>
+                        </ul>
+                    </div>
+                    <button onclick="selectPackage(8, 2200, 160)" class="mt-6 w-full py-3 bg-slate-800 hover:bg-brand-gold hover:text-brand-dark text-slate-200 font-bold rounded-xl transition border border-slate-700 flex items-center justify-center gap-2">
+                        <span data-i18n="btnSelectPkg">اختيار الباقة</span>
+                        <i class="fa-solid fa-arrow-left text-xs rtl-icon"></i>
+                    </button>
+                </div>
+
+                <!-- Extra Hour Rate -->
+                <div class="glass-card rounded-3xl p-6 flex flex-col justify-between bg-slate-900/60 border-slate-800">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-start">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700" data-i18n="extraHourBadge">ساعة إضافية</span>
+                            <i class="fa-solid fa-stopwatch text-brand-gold text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white" data-i18n="extraHourTitle">الوقت الإضافي</h3>
+                            <div class="text-3xl font-black text-brand-gold mt-2">300 <span class="text-sm font-normal text-slate-300" data-i18n="extraHourRate">ج.م / ساعة</span></div>
+                        </div>
+                        <p class="text-xs text-slate-400 pt-2 border-t border-slate-800 leading-relaxed" data-i18n="extraHourDesc">
+                            تُحسب تلقائياً في حال رغبتك بتمديد وقت مشوارك بعد انتهاء الساعات الأساسية للباقة.
+                        </p>
+                    </div>
+                    <div class="mt-6 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50 text-center text-xs text-slate-300" data-i18n="extraHourFooter">
+                        مرونة كاملة للتمديد حسب راحتك
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Calculator Section -->
+        <section id="calculator" class="scroll-mt-24">
+            <div class="glass-card rounded-3xl p-6 md:p-10 border-brand-gold/30 relative overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    
+                    <!-- Form Controls -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="space-y-2">
+                            <span class="text-brand-gold text-sm font-bold tracking-wider uppercase flex items-center gap-2">
+                                <i class="fa-solid fa-calculator"></i> <span data-i18n="calcBadge">حاسبة التكلفة التفاعلية</span>
+                            </span>
+                            <h2 class="text-2xl md:text-3xl font-extrabold text-white" data-i18n="calcTitle">احسب قيمة مشوارك بدقة</h2>
+                            <p class="text-slate-400 text-sm" data-i18n="calcSub">اختر الباقة الأساسية وحدد المسافة المتوقعة بالكيلومترات للحصول على تكلفة تقديرية فورية.</p>
+                        </div>
+
+                        <!-- Step 1: Select Duration -->
+                        <div class="space-y-3">
+                            <label class="block text-sm font-semibold text-slate-200" data-i18n="calcStep1">1. اختر عدد الساعات (الباقة):</label>
+                            <div class="grid grid-cols-3 gap-3">
+                                <button type="button" onclick="setCalcHours(3)" id="btn-hours-3" class="calc-hour-btn active py-3 px-2 rounded-xl border font-bold text-sm text-center transition bg-brand-gold text-brand-dark border-brand-gold">
+                                    <span data-i18n="opt3Hours">3 ساعات</span>
+                                </button>
+                                <button type="button" onclick="setCalcHours(5)" id="btn-hours-5" class="calc-hour-btn py-3 px-2 rounded-xl border font-bold text-sm text-center transition bg-slate-800 text-slate-300 border-slate-700 hover:border-brand-gold/50">
+                                    <span data-i18n="opt5Hours">5 ساعات</span>
+                                </button>
+                                <button type="button" onclick="setCalcHours(8)" id="btn-hours-8" class="calc-hour-btn py-3 px-2 rounded-xl border font-bold text-sm text-center transition bg-slate-800 text-slate-300 border-slate-700 hover:border-brand-gold/50">
+                                    <span data-i18n="opt8Hours">8 ساعات</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Distance Input -->
+                        <div class="space-y-3 pt-2">
+                            <div class="flex justify-between items-center text-sm">
+                                <label for="distance-range" class="font-semibold text-slate-200" data-i18n="calcStep2">2. المسافة التقديرية (كم):</label>
+                                <span class="text-brand-gold font-bold text-lg"><span id="km-display">60</span> <span data-i18n="unitKm">كم</span></span>
+                            </div>
+                            
+                            <input type="range" id="distance-range" min="10" max="300" value="60" step="5" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer" oninput="updateCalculation()">
+                            
+                            <div class="flex justify-between text-xs text-slate-400 px-1">
+                                <span>10 <span data-i18n="unitKm">كم</span></span>
+                                <span>150 <span data-i18n="unitKm">كم</span></span>
+                                <span>300 <span data-i18n="unitKm">كم</span></span>
+                            </div>
+                        </div>
+
+                        <!-- Info Box Rule -->
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-xs text-slate-300 space-y-1">
+                            <div class="flex items-center gap-2 text-brand-gold font-semibold">
+                                <i class="fa-solid fa-circle-info"></i>
+                                <span data-i18n="ruleHeader">قاعدة احتساب المسافة:</span>
+                            </div>
+                            <p class="leading-relaxed text-slate-400" data-i18n="ruleBody">
+                                كل ساعة حجز تشمل <strong>20 كم</strong> مجاناً. أي كيلومتر إضافي يُحسب بسعر <strong>12.5 جنيه</strong> فقط.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Receipt / Result Box -->
+                    <div class="lg:col-span-5 bg-slate-900/90 rounded-2xl p-6 border border-slate-800 space-y-6">
+                        <h3 class="text-lg font-bold text-white pb-3 border-b border-slate-800 flex items-center justify-between">
+                            <span data-i18n="summaryTitle">تفاصيل الحسبة التقديرية</span>
+                            <i class="fa-solid fa-receipt text-slate-500"></i>
+                        </h3>
+
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between text-slate-300">
+                                <span><span data-i18n="sumBasePkg">سعر الباقة الأساسية</span> (<span id="summary-hours">3</span> <span data-i18n="unitHours">ساعات</span>):</span>
+                                <span class="font-semibold text-white" id="summary-base-price">900 ج.م</span>
+                            </div>
+                            <div class="flex justify-between text-slate-300">
+                                <span data-i18n="sumFreeKm">المسافة المشمولة مجاناً:</span>
+                                <span class="font-semibold text-brand-accent" id="summary-included-km">60 كم</span>
+                            </div>
+                            <div class="flex justify-between text-slate-300">
+                                <span><span data-i18n="sumExtraKm">الكيلومترات الإضافية</span> (<span id="summary-extra-km">0</span> <span data-i18n="unitKm">كم</span> × 12.5):</span>
+                                <span class="font-semibold text-white" id="summary-extra-price">0 ج.م</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-800 space-y-1">
+                            <div class="text-xs text-slate-400" data-i18n="sumTotalLabel">التكلفة التقديرية الإجمالية:</div>
+                            <div class="text-3xl font-black text-brand-gold" id="total-price">900 <span class="text-base font-normal text-slate-300" data-i18n="currencyFull">جنيه مصري</span></div>
+                        </div>
+
+                        <!-- CTA Dynamic WhatsApp Button -->
+                        <a id="whatsapp-btn" href="#" target="_blank" class="w-full py-4 bg-brand-accent hover:bg-brand-accentHover text-white font-bold rounded-xl transition shadow-lg green-glow flex items-center justify-center gap-3 text-base">
+                            <i class="fa-brands fa-whatsapp text-xl"></i>
+                            <span data-i18n="btnBookWa">تأكيد وحجز المشوار عبر واتساب</span>
+                        </a>
+
+                        <p class="text-center text-[11px] text-slate-500" data-i18n="calcFooterNote">
+                            * الأسعار مبدئية وتؤكد فور مراجعة خط السير مع الفريق
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Features / Why Choose Us -->
+        <section class="space-y-8">
+            <div class="text-center space-y-2">
+                <h2 class="text-2xl md:text-3xl font-bold text-white" data-i18n="whyTitle">لماذا تختار "مشوارك براحتك"؟</h2>
+                <p class="text-slate-400 text-sm" data-i18n="whySub">نوفر لك تجربة تنقل مريحة وآمنة في القاهرة</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card rounded-2xl p-6 space-y-3 border-slate-800">
+                    <div class="w-12 h-12 rounded-xl bg-brand-gold/10 border border-brand-gold/30 text-brand-gold flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white" data-i18n="why1Title">سائقون محترفون</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed" data-i18n="why1Desc">
+                        سائقون على أعلى مستوى من الخصوصية والاحترافية، والدراية الكاملة بأفضل الطرق لتجنب الزحام.
+                    </p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6 space-y-3 border-slate-800">
+                    <div class="w-12 h-12 rounded-xl bg-brand-gold/10 border border-brand-gold/30 text-brand-gold flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-car"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white" data-i18n="why2Title">سيارات حديثة ومكيفة</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed" data-i18n="why2Desc">
+                        أسطول من السيارات الحديثة لضمان أقصى درجات الراحة والرفاهية أثناء مشوارك.
+                    </p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6 space-y-3 border-slate-800">
+                    <div class="w-12 h-12 rounded-xl bg-brand-gold/10 border border-brand-gold/30 text-brand-gold flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white" data-i18n="why3Title">تكلفة واضحة ومسبقة</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed" data-i18n="why3Desc">
+                        لا توجد أي تكاليف خفية أو مفاجآت. يتم الاتفاق المسبق على التكلفة والانتظار وسياسة الإلغاء.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Policy Note Section -->
+        <section class="glass-card rounded-2xl p-6 bg-slate-900/50 border-slate-800 text-slate-300 text-sm leading-relaxed space-y-3">
+            <h3 class="text-base font-bold text-brand-gold flex items-center gap-2">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span data-i18n="policyHeader">ملاحظات وإرشادات تنظيمية:</span>
+            </h3>
+            <ul class="list-disc list-inside space-y-1 text-slate-400 text-xs md:text-sm">
+                <li data-i18n="policy1">تُؤكّد الأسعار النهائية بعد مراجعة خط السير والمسافات المطلوبة بالتفصيل.</li>
+                <li data-i18n="policy2">رسوم الانتظار والركن ورسوم الطرق المدفوعة (الكارتة) يتم الاتفاق عليها مسبقاً قبل بدء المشوار.</li>
+                <li data-i18n="policy3">يتم تأكيد سياسة الإلغاء وتغيير المواعيد عند طلب الحجز عبر الواتساب.</li>
+            </ul>
+        </section>
+
+        <!-- Final CTA Box -->
+        <section class="text-center bg-gradient-to-r from-brand-dark via-slate-900 to-brand-dark border border-brand-gold/30 rounded-3xl p-8 md:p-12 space-y-6 gold-glow">
+            <h2 class="text-2xl md:text-4xl font-extrabold text-white" data-i18n="ctaTitle">جاهز لرحلتك التالية؟</h2>
+            <p class="text-slate-300 max-w-xl mx-auto text-sm md:text-base" data-i18n="ctaSub">
+                تواصل معنا الآن عبر الواتساب أو الاتصال المباشر لتأكيد موعدك وسيلبي فريقنا احتياجك فوراً.
+            </p>
+            <div class="flex flex-wrap items-center justify-center gap-4 pt-2">
+                <a id="cta-direct-wa" href="https://wa.me/201091810410?text=%D8%A3%D9%87%D9%84%D8%A7%D9%8B%D8%8C%20%D8%A3%D9%86%D8%A7%20%D9%85%D9%87%D8%AA%D9%85%20%D8%A8%D8%AD%D8%AC%D8%B2%20%D8%B3%D9%8A%D8%A7%D8%B1%D8%A9%20%D8%A8%D8%B3%D8%A7%D8%A6%D9%82%20%D9%85%D9%86%20%D9%85%D8%B4%D9%88%D8%A7%D8%B1%D9%83%20%D8%A8%D8%B1%D8%A7%D8%AD%D8%AA%D9%83." target="_blank" class="bg-brand-accent hover:bg-brand-accentHover text-white font-bold px-8 py-3.5 rounded-2xl transition shadow-lg green-glow flex items-center gap-3">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                    <span data-i18n="ctaBtnWa">حجز مباشر عبر واتساب</span>
+                </a>
+                <a href="tel:01091810410" class="bg-slate-800 hover:bg-slate-700 text-brand-gold font-bold px-8 py-3.5 rounded-2xl transition border border-brand-gold/40 flex items-center gap-3">
+                    <i class="fa-solid fa-phone"></i>
+                    <span dir="ltr">01091810410</span>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-16 border-t border-slate-800/80 bg-brand-dark/90 py-8 text-center text-slate-400 text-sm">
+        <div class="max-w-6xl mx-auto px-4 space-y-3">
+            <p class="font-bold text-slate-200" data-i18n="footerSlogan">مشوارك مهم.. ووقتك كمان مهم</p>
+            <p class="text-xs text-slate-500"><span data-i18n="footerRights">جميع الحقوق محفوظة</span> &copy; <span id="year"></span> - <span data-i18n="brandName">مشوارك</span> <span data-i18n="brandHighlight">براحتك</span></p>
+        </div>
+    </footer>
+
+    <!-- Interactive Logic & Language Translations JavaScript -->
+    <script>
+        // Set dynamic copyright year
+        document.getElementById('year').innerText = new Date().getFullYear();
+
+        // Language Translations Dictionary
+        const i18n = {
+            ar: {
+                brandName: "مشوارك",
+                brandHighlight: "براحتك",
+                brandSub: "حجز سيارة بسائق في القاهرة",
+                badgeText: "راحة، خصوصية، ومواعيد دقيقة",
+                heroTitleStart: "تنقّل في القاهرة",
+                heroTitleHighlight: "بأعلى درجات الراحة",
+                heroSub: "احجز سيارتك الفاخرة بسائق محترف بالساعة أو باليوم. أسعار واضحة ومحددة مسبقاً وباقات مرنة تناسب جميع مشاويرك اليومية والعملية.",
+                btnCalc: "احسب تكلفة مشوارك",
+                btnPackages: "استعراض الباقات",
+                packagesTitle: "باقات الحجز المتاحة",
+                packagesSub: "اختر الباقة المناسبة لوقتك واحتياجك",
+                pkg1Badge: "باقة المشاوير السريعة",
+                pkg1Title: "3 ساعات",
+                pkg2Badge: "باقة نصف يوم",
+                pkg2Title: "5 ساعات",
+                pkg3Badge: "باقة اليوم الكامل",
+                pkg3Title: "8 ساعات",
+                extraHourBadge: "ساعة إضافية",
+                extraHourTitle: "الوقت الإضافي",
+                extraHourRate: "ج.م / ساعة",
+                extraHourDesc: "تُحسب تلقائياً في حال رغبتك بتمديد وقت مشوارك بعد انتهاء الساعات الأساسية للباقة.",
+                extraHourFooter: "مرونة كاملة للتمديد حسب راحتك",
+                currency: "ج.م",
+                currencyFull: "جنيه مصري",
+                pkg1Km: "تشمل حتى <strong>60 كم</strong> إجماليًا",
+                pkg2Km: "تشمل حتى <strong>100 كم</strong> إجماليًا",
+                pkg3Km: "تشمل حتى <strong>160 كم</strong> إجماليًا",
+                featCar: "سيارة حديثة ومكيفة",
+                featDriver: "سائق محترف وملتزم",
+                pkg2Note: "مناسبة للاجتماعات والتسوق",
+                pkg3Note: "تغطية لكافة تنقلات اليوم",
+                pkg3Flex: "أقصى درجات المرونة والراحة",
+                btnSelectPkg: "اختيار الباقة",
+                popularRibbon: "الأكثر طلباً",
+                calcBadge: "حاسبة التكلفة التفاعلية",
+                calcTitle: "احسب قيمة مشوارك بدقة",
+                calcSub: "اختر الباقة الأساسية وحدد المسافة المتوقعة بالكيلومترات للحصول على تكلفة تقديرية فورية.",
+                calcStep1: "1. اختر عدد الساعات (الباقة):",
+                calcStep2: "2. المسافة التقديرية (كم):",
+                opt3Hours: "3 ساعات",
+                opt5Hours: "5 ساعات",
+                opt8Hours: "8 ساعات",
+                unitKm: "كم",
+                ruleHeader: "قاعدة احتساب المسافة:",
+                ruleBody: "كل ساعة حجز تشمل <strong>20 كم</strong> مجاناً. أي كيلومتر إضافي يُحسب بسعر <strong>12.5 جنيه</strong> فقط.",
+                summaryTitle: "تفاصيل الحسبة التقديرية",
+                sumBasePkg: "سعر الباقة الأساسية",
+                unitHours: "ساعات",
+                sumFreeKm: "المسافة المشمولة مجاناً:",
+                sumExtraKm: "الكيلومترات الإضافية",
+                sumTotalLabel: "التكلفة التقديرية الإجمالية:",
+                btnBookWa: "تأكيد وحجز المشوار عبر واتساب",
+                calcFooterNote: "* الأسعار مبدئية وتؤكد فور مراجعة خط السير مع الفريق",
+                whyTitle: "لماذا تختار \"مشوارك براحتك\"؟",
+                whySub: "نوفر لك تجربة تنقل مريحة وآمنة في القاهرة",
+                why1Title: "سائقون محترفون",
+                why1Desc: "سائقون على أعلى مستوى من الخصوصية والاحترافية، والدراية الكاملة بأفضل الطرق لتجنب الزحام.",
+                why2Title: "سيارات حديثة ومكيفة",
+                why2Desc: "أسطول من السيارات الحديثة لضمان أقصى درجات الراحة والرفاهية أثناء مشوارك.",
+                why3Title: "تكلفة واضحة ومسبقة",
+                why3Desc: "لا توجد أي تكاليف خفية أو مفاجآت. يتم الاتفاق المسبق على التكلفة والانتظار وسياسة الإلغاء.",
+                policyHeader: "ملاحظات وإرشادات تنظيمية:",
+                policy1: "تُؤكّد الأسعار النهائية بعد مراجعة خط السير والمسافات المطلوبة بالتفصيل.",
+                policy2: "رسوم الانتظار والركن ورسوم الطرق المدفوعة (الكارتة) يتم الاتفاق عليها مسبقاً قبل بدء المشوار.",
+                policy3: "يتم تأكيد سياسة الإلغاء وتغيير المواعيد عند طلب الحجز عبر الواتساب.",
+                ctaTitle: "جاهز لرحلتك التالية؟",
+                ctaSub: "تواصل معنا الآن عبر الواتساب أو الاتصال المباشر لتأكيد موعدك وسيلبي فريقنا احتياجك فوراً.",
+                ctaBtnWa: "حجز مباشر عبر واتساب",
+                footerSlogan: "مشوارك مهم.. ووقتك كمان مهم",
+                footerRights: "جميع الحقوق محفوظة"
+            },
+            en: {
+                brandName: "Mishwark",
+                brandHighlight: "Brahtak",
+                brandSub: "Chauffeur & Car Rental in Cairo",
+                badgeText: "Comfort, Privacy, & Punctuality",
+                heroTitleStart: "Travel Around Cairo",
+                heroTitleHighlight: "In Premium Comfort",
+                heroSub: "Book your luxury car with a professional private driver by the hour or by the day. Transparent pricing, upfront quotes, and flexible packages for all your needs.",
+                btnCalc: "Calculate Fare",
+                btnPackages: "Explore Packages",
+                packagesTitle: "Available Booking Packages",
+                packagesSub: "Select the package that fits your time & itinerary",
+                pkg1Badge: "Quick Trips Package",
+                pkg1Title: "3 Hours",
+                pkg2Badge: "Half-Day Package",
+                pkg2Title: "5 Hours",
+                pkg3Badge: "Full-Day Package",
+                pkg3Title: "8 Hours",
+                extraHourBadge: "Extra Hour",
+                extraHourTitle: "Overtime Rate",
+                extraHourRate: "EGP / Hour",
+                extraHourDesc: "Automatically calculated if you choose to extend your trip duration beyond the base package.",
+                extraHourFooter: "Full flexibility to extend as needed",
+                currency: "EGP",
+                currencyFull: "Egyptian Pounds (EGP)",
+                pkg1Km: "Includes up to <strong>60 km</strong> total",
+                pkg2Km: "Includes up to <strong>100 km</strong> total",
+                pkg3Km: "Includes up to <strong>160 km</strong> total",
+                featCar: "Modern, Air-Conditioned Vehicle",
+                featDriver: "Professional & Courteous Driver",
+                pkg2Note: "Ideal for meetings & shopping trips",
+                pkg3Note: "Covers all your day's commutes",
+                pkg3Flex: "Maximum flexibility & peace of mind",
+                btnSelectPkg: "Select Package",
+                popularRibbon: "MOST POPULAR",
+                calcBadge: "Interactive Fare Calculator",
+                calcTitle: "Calculate Your Estimated Fare",
+                calcSub: "Choose a base package and set your estimated mileage to get an instant cost calculation.",
+                calcStep1: "1. Select Duration (Package):",
+                calcStep2: "2. Estimated Distance (km):",
+                opt3Hours: "3 Hours",
+                opt5Hours: "5 Hours",
+                opt8Hours: "8 Hours",
+                unitKm: "km",
+                ruleHeader: "Distance Allowance Rule:",
+                ruleBody: "Each booked hour includes <strong>20 km</strong> free. Additional distance is charged at only <strong>12.5 EGP/km</strong>.",
+                summaryTitle: "Estimated Calculation Details",
+                sumBasePkg: "Base Package Rate",
+                unitHours: "Hours",
+                sumFreeKm: "Included Distance Allowance:",
+                sumExtraKm: "Extra Mileage",
+                sumTotalLabel: "Estimated Total Fare:",
+                btnBookWa: "Confirm & Book via WhatsApp",
+                calcFooterNote: "* Rates are preliminary and confirmed upon route verification",
+                whyTitle: "Why Choose \"Mishwark Brahtak\"?",
+                whySub: "Providing safe, reliable, and comfortable transport across Cairo",
+                why1Title: "Professional Chauffeurs",
+                why1Desc: "Experienced drivers trained for privacy, safety, and optimal route selection around city traffic.",
+                why2Title: "Modern & Clean Cars",
+                why2Desc: "A fleet of modern, air-conditioned vehicles ensuring maximum comfort on every journey.",
+                why3Title: "Upfront & Clear Pricing",
+                why3Desc: "No hidden fees or unexpected costs. Waiting times, tolls, and terms agreed upon in advance.",
+                policyHeader: "Important Guidelines & Terms:",
+                policy1: "Final fares are confirmed after evaluating your detailed itinerary and distance.",
+                policy2: "Waiting time, parking, and highway toll fees are agreed upon prior to starting your trip.",
+                policy3: "Cancellation and rescheduling policies are confirmed via WhatsApp during booking.",
+                ctaTitle: "Ready for Your Next Trip?",
+                ctaSub: "Contact us via WhatsApp or direct phone call to reserve your driver now.",
+                ctaBtnWa: "Direct WhatsApp Booking",
+                footerSlogan: "Your trip matters.. and so does your time",
+                footerRights: "All rights reserved"
+            }
+        };
+
+        // State variables
+        let currentLang = 'ar';
+        let selectedHours = 3;
+        let selectedBasePrice = 900;
+        let selectedIncludedKm = 60;
+        const extraKmRate = 12.5;
+
+        const packageData = {
+            3: { price: 900, km: 60 },
+            5: { price: 1400, km: 100 },
+            8: { price: 2200, km: 160 }
+        };
+
+        // Switch Language Function
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            const body = document.body;
+            const langLabel = document.getElementById('lang-label');
+
+            if (currentLang === 'en') {
+                body.setAttribute('dir', 'ltr');
+                langLabel.innerText = 'عربي';
+            } else {
+                body.setAttribute('dir', 'rtl');
+                langLabel.innerText = 'English';
+            }
+
+            // Update icon orientation for RTL/LTR arrows
+            document.querySelectorAll('.rtl-icon').forEach(icon => {
+                if (currentLang === 'en') {
+                    icon.classList.remove('fa-arrow-left');
+                    icon.classList.add('fa-arrow-right');
+                } else {
+                    icon.classList.remove('fa-arrow-right');
+                    icon.classList.add('fa-arrow-left');
+                }
+            });
+
+            // Translate static elements
+            document.querySelectorAll('[data-i18n]').forEach(elem => {
+                const key = elem.getAttribute('data-i18n');
+                if (i18n[currentLang][key]) {
+                    elem.innerHTML = i18n[currentLang][key];
+                }
+            });
+
+            // Update dynamic calculator text & links
+            updateCalculation();
+            updateDirectWaButton();
+        }
+
+        // Handle hour selection
+        function setCalcHours(hours) {
+            selectedHours = hours;
+            selectedBasePrice = packageData[hours].price;
+            selectedIncludedKm = packageData[hours].km;
+
+            // Update UI active buttons
+            [3, 5, 8].forEach(h => {
+                const btn = document.getElementById(`btn-hours-${h}`);
+                if (h === hours) {
+                    btn.className = "calc-hour-btn active py-3 px-2 rounded-xl border font-bold text-sm text-center transition bg-brand-gold text-brand-dark border-brand-gold";
+                } else {
+                    btn.className = "calc-hour-btn py-3 px-2 rounded-xl border font-bold text-sm text-center transition bg-slate-800 text-slate-300 border-slate-700 hover:border-brand-gold/50";
+                }
+            });
+
+            const distanceInput = document.getElementById('distance-range');
+            if (parseInt(distanceInput.value) < selectedIncludedKm) {
+                distanceInput.value = selectedIncludedKm;
+            }
+
+            updateCalculation();
+        }
+
+        // Direct package selection from cards
+        function selectPackage(hours, price, km) {
+            setCalcHours(hours);
+            const calcSection = document.getElementById('calculator');
+            calcSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Calculation Engine
+        function updateCalculation() {
+            const distanceInput = document.getElementById('distance-range');
+            const totalKm = parseInt(distanceInput.value);
+
+            const extraKm = Math.max(0, totalKm - selectedIncludedKm);
+            const extraPrice = extraKm * extraKmRate;
+            const totalPrice = selectedBasePrice + extraPrice;
+
+            const curText = i18n[currentLang].currency;
+            const curFullText = i18n[currentLang].currencyFull;
+
+            document.getElementById('km-display').innerText = totalKm;
+            document.getElementById('summary-hours').innerText = selectedHours;
+            document.getElementById('summary-base-price').innerText = `${selectedBasePrice.toLocaleString()} ${curText}`;
+            document.getElementById('summary-included-km').innerText = `${selectedIncludedKm} ${i18n[currentLang].unitKm}`;
+            document.getElementById('summary-extra-km').innerText = extraKm;
+            document.getElementById('summary-extra-price').innerText = `${extraPrice.toLocaleString()} ${curText}`;
+            document.getElementById('total-price').innerHTML = `${totalPrice.toLocaleString()} <span class="text-base font-normal text-slate-300">${curFullText}</span>`;
+
+            // Prepare WhatsApp dynamic text in selected language
+            const phone = "201091810410";
+            let message = "";
+
+            if (currentLang === 'en') {
+                message = `Hello, I would like to book a private car & driver with (Mishwark Brahtak):\n\n`;
+                message += `⏱️ Selected Package: ${selectedHours} Hours (${selectedBasePrice} EGP)\n`;
+                message += `🛣️ Estimated Distance: ${totalKm} km\n`;
+                if (extraKm > 0) {
+                    message += `➕ Extra Distance: ${extraKm} km (+${extraPrice} EGP)\n`;
+                }
+                message += `💰 Estimated Total Fare: ${totalPrice.toLocaleString()} EGP.\n\n`;
+                message += `Please confirm availability and itinerary details.`;
+            } else {
+                message = `أهلاً بك، أرغب في حجز سيارة بسائق عبر تطبيق (مشوارك براحتك):\n\n`;
+                message += `⏱️ الباقة المختارة: ${selectedHours} ساعات (${selectedBasePrice} ج.م)\n`;
+                message += `🛣️ المسافة التقديرية: ${totalKm} كم\n`;
+                if (extraKm > 0) {
+                    message += `➕ الكيلومترات الإضافية: ${extraKm} كم (+${extraPrice} ج.م)\n`;
+                }
+                message += `💰 التكلفة الإجمالية التقديرية: ${totalPrice.toLocaleString()} جنيه مصري.\n\n`;
+                message += `يرجى تأكيد إمكانية الحجز وتفاصيل خط السير.`;
+            }
+
+            const encodedMessage = encodeURIComponent(message);
+            document.getElementById('whatsapp-btn').href = `https://wa.me/${phone}?text=${encodedMessage}`;
+        }
+
+        // Direct CTA WhatsApp button text based on language
+        function updateDirectWaButton() {
+            const phone = "201091810410";
+            let directMsg = currentLang === 'en'
+                ? "Hello, I am interested in booking a private car & driver service with Mishwark Brahtak."
+                : "أهلاً، أنا مهتم بحجز سيارة بسائق من مشوارك براحتك.";
+            document.getElementById('cta-direct-wa').href = `https://wa.me/${phone}?text=${encodeURIComponent(directMsg)}`;
+        }
+
+        // Initialize default view on load
+        window.onload = function() {
+            updateCalculation();
+            updateDirectWaButton();
+        };
+    </script>
+</body>
+</html>
